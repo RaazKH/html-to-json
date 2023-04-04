@@ -2,28 +2,43 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-url = input("Enter the URL of the webpage: ")
+url = 'https://www.bahai.org/documents/the-universal-house-of-justice/letter-worlds-religious-leaders'
 
-# Make a GET request to the webpage
-response = requests.get(url)
+# Make a request to the website
+r = requests.get(url)
 
-# Parse the HTML content of the webpage using BeautifulSoup
-soup = BeautifulSoup(response.content, 'html.parser')
+# Create a BeautifulSoup object from the HTML content
+soup = BeautifulSoup(r.content, 'html.parser')
 
+# Find all the HTML elements that contain text
+elements = soup.find_all(string=True)
 
-# Extract all the text from the webpage within <p> tags
-sections = []
-for index, element in enumerate(soup.find_all('p')):
-    text = element.decode_contents().strip()
-    # Remove the first and last <p> tags and strip whitespace
-    if text.startswith('<p>'):
-        text = text[3:]
-    if text.endswith('</p>'):
-        text = text[:-4]
-    text = text.strip()
-    sections.append({f"text{index+1}": text})
+# Create a dictionary to store the JSON output
+output = {}
 
+# Loop through each element and create a JSON object for it
+for element in elements:
+    # Ignore elements that are just whitespace
+    if not element.strip():
+        continue
+    # Ignore elements that are HTML, head, or script tags
+    if element.parent.name in ['html', 'head', 'script']:
+        continue
+    if 'class' in element.parent.attrs and ('js-return-top' in element.parent['class'] or 'js-close' in element.parent['class']):
+        continue
+    # Create a dictionary for the element
+    element_dict = {}
+    element_dict['text'] = element.strip()
+    # Add the element's tag name and attributes to the dictionary
+    tag = element.parent.name
+    element_dict['tag'] = tag
+    attributes = {}
+    for attr in element.parent.attrs:
+        attributes[attr] = element.parent.attrs[attr]
+    element_dict['attributes'] = attributes
+    # Add the element's JSON object to the output dictionary
+    output[str(element)] = element_dict
 
-# Write the data to a formatted JSON file
-with open("output.json", "w") as f:
-    json.dump(sections, f, indent=4, ensure_ascii=False, default=str)
+# Write the output dictionary to a JSON file
+with open('output.json', 'w') as f:
+    json.dump(output, f, indent=4, ensure_ascii=False, default=str)
