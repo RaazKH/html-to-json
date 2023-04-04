@@ -7,7 +7,7 @@ This Python script takes a URL for a webpage as an input and then takes all the 
 To use the script, run it from the command line and enter the URL of the webpage you want to scrape when prompted:
 
 ```
-python scrape.py
+python3 scrape.py
 Enter the URL of the webpage: [Enter URL here]
 ```
 
@@ -23,7 +23,7 @@ The script requires the following Python libraries:
 You can install these libraries using `pip`:
 
 ```
-pip install requests beautifulsoup4
+pip3 install requests beautifulsoup4
 
 ```
 
