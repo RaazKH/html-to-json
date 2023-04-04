@@ -19,12 +19,11 @@ The script requires the following Python libraries:
 
 - `requests`
 - `beautifulsoup4`
-- `json`
 
 You can install these libraries using `pip`:
 
 ```
-pip install requests beautifulsoup4 json
+pip install requests beautifulsoup4
 
 ```
 
