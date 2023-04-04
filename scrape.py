@@ -41,18 +41,8 @@ for index, element in enumerate(elements):
     else:
         continue
 
-    # Create a dictionary for the element
-    element_dict = {}
-    element_dict['text'] = parent_text
-    # Add the element's tag name and attributes to the dictionary
-    tag = element.parent.name
-    element_dict['tag'] = tag
-    attributes = {}
-    for attr in element.parent.attrs:
-        attributes[attr] = element.parent.attrs[attr]
-    element_dict['attributes'] = attributes
     # Add the element's JSON object to the output dictionary
-    output[f"paragraph{index}"] = element_dict
+    output[f"paragraph{index}"] = parent_text
 
 # Write the output dictionary to a JSON file
 with open('output.json', 'w') as f:
