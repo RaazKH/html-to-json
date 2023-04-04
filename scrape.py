@@ -10,11 +10,19 @@ response = requests.get(url)
 # Parse the HTML content of the webpage using BeautifulSoup
 soup = BeautifulSoup(response.content, 'html.parser')
 
-# Extract all the text from the webpage and split it by newlines when it's enclosed in its own container
+
+# Extract all the text from the webpage within <p> tags
 sections = []
 for index, element in enumerate(soup.find_all('p')):
-    html_content = str(element)
-    sections.append({f"text{index+1}": html_content})
+    text = element.decode_contents().strip()
+    # Remove the first and last <p> tags and strip whitespace
+    if text.startswith('<p>'):
+        text = text[3:]
+    if text.endswith('</p>'):
+        text = text[:-4]
+    text = text.strip()
+    sections.append({f"text{index+1}": text})
+
 
 # Write the data to a formatted JSON file
 with open("output.json", "w") as f:
