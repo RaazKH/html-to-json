@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-url = 'https://www.bahai.org/documents/the-universal-house-of-justice/letter-worlds-religious-leaders'
+url = input("Enter the URL of the webpage: ")
 
 # Make a request to the website
 response = requests.get(url)
@@ -42,7 +42,7 @@ for index, element in enumerate(elements):
         continue
 
     # Add the element's JSON object to the output dictionary
-    output[f"paragraph{index}"] = parent_text
+    output[f"paragraph{index}"] = parent_text.replace('"', "'")
 
 # Write the output dictionary to a JSON file
 with open('output.json', 'w') as f:
